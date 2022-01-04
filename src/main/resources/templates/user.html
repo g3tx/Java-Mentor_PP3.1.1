@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User info</title>
+</head>
+<body>
+<div>
+    <th:block th:include="menuList">Menu</th:block>
+</div>
+<div>
+    <table border="3" bgcolor="white">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Age</th>
+            <th>Password</th>
+            <th>E-mail</th>
+            <th>Role</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${user.getUserId()}">Id</td>
+            <td th:text="${user.getFirstname()}">Firstname</td>
+            <td th:text="${user.getLastname()}">Lastname</td>
+            <td th:text="${user.getAge()}">Age</td>
+            <td th:text="${user.getPassword()}">Password</td>
+            <td th:text="${user.getEmail()}">E-mail</td>
+            <td>
+                <div th:each="role: ${user.getRoles()}">
+                    <span th:if="(${role.getRolename()} == 'ROLE_ADMIN')" th:utext="Admin"></span>
+                    <span th:if="(${role.getRolename()} == 'ROLE_USER')" th:utext="User"></span>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All users</title>
+</head>
+<body>
+<h2>All users</h2>
+<div>
+    <th:block th:include="menuList">Menu</th:block>
+</div>
+<div>
+    <table border="3" bgcolor="white">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Age</th>
+            <th>Password</th>
+            <th>E-mail</th>
+            <th>Role</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.getUserId()}">Id</td>
+            <td th:text="${user.getFirstname()}">Firstname</td>
+            <td th:text="${user.getLastname()}">Lastname</td>
+            <td th:text="${user.getAge()}">Age</td>
+            <td th:text="${user.getPassword()}">Password</td>
+            <td th:text="${user.getEmail()}">E-mail</td>
+            <td>
+                <div th:each="role: ${user.getRoles()}">
+                    <span th:if="(${role.getRolename()} == 'ROLE_ADMIN')" th:utext="Admin"></span>
+                    <span th:if="(${role.getRolename()} == 'ROLE_USER')" th:utext="User"></span>
+                </div>
+            </td>
+            <td>
+                <form th:action="@{edit/{id}(id=${user.getUserId()})}" th:object="${user}">
+                    <button type="submit">Edit user</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{delete/{id}(id=${user.getUserId()})}" th:object="${user}">
+                    <input type="hidden" name="id" th:value="${user.getUserId()}">
+                    <button type="submit">Delete user</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <form th:action="@{add}">
+        <button type="submit">Add User</button>
+    </form>
+</div>
+</body>
+</html>
