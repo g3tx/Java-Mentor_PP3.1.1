@@ -14,5 +14,8 @@
         <input type="submit"/>
     </form>
 </div>
+
+<!--/*@thymesVar id="errorMessage" type="java.lang.String"*/-->
+<div class="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
 </body>
 </html>

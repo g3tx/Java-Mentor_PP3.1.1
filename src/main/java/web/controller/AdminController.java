@@ -52,7 +52,7 @@ public class AdminController {
             roles.add(roleService.getRoleByName("ROLE_ADMIN"));
         }
         user.setRoles(roles);
-        userService.addUser(user);
+        userService.saveUser(user);
         return "redirect:/admin";
     }
 
@@ -79,7 +79,7 @@ public class AdminController {
             roles.add(roleService.getRoleByName("ROLE_ADMIN"));
         }
         user.setRoles(roles);
-        userService.editUser(user);
+        userService.saveUser(user);
         return "redirect:/admin";
     }
 
