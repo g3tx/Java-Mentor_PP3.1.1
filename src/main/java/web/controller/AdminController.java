@@ -3,27 +3,23 @@ package web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import web.model.Role;
 import web.model.User;
 import web.service.RoleService;
 import web.service.UserService;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Controller
 public class AdminController {
 
-    private final UserService userService;
-    private final RoleService roleService;
+    @Autowired
+    private UserService userService;
 
     @Autowired
-    public AdminController(UserService userService, RoleService roleService) {
-        this.userService = userService;
-        this.roleService = roleService;
-    }
+    private RoleService roleService;
 
     @GetMapping(value = "/admin")
     public String redirect() {
@@ -31,55 +27,40 @@ public class AdminController {
     }
 
     @GetMapping(value = "/admin/all")
-    public String showAllUsers(ModelMap model) {
+    public String showAllUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
         return "admin_allUsers";
     }
 
     @GetMapping(value = "/admin/add")
     public String addUserForm(Model model) {
-        User user = new User();
-        model.addAttribute("user", user);
+        model.addAttribute("listOfRoles", roleService.getAllRoles());
+        model.addAttribute("newUser", new User());
         return "admin_addUser";
     }
 
     @PostMapping(value = "/admin/add")
-    public String addUser(@ModelAttribute("user") User user,
-                          @RequestParam(required = false) String roleAdmin) {
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleService.getRoleByName("ROLE_USER"));
-        if (roleAdmin != null && roleAdmin.equals("ROLE_ADMIN")) {
-            roles.add(roleService.getRoleByName("ROLE_ADMIN"));
-        }
-        user.setRoles(roles);
-        userService.saveUser(user);
+    public String addUser(@ModelAttribute("newUser") User newUser,
+                          @RequestParam("authorities") List<String> listOfRoles) {
+        Set<Role> roleSet = userService.ListOfRolesToSet(listOfRoles);
+        newUser.setRoles(roleSet);
+        userService.saveUser(newUser);
         return "redirect:/admin";
     }
 
     @GetMapping(value = "/admin/edit/{id}")
-    public String editUserForm(ModelMap model, @PathVariable("id") Long id) {
-        User user = userService.getUserById(id);
-        Set<Role> roles = user.getRoles();
-        for (Role role : roles) {
-            if (role.equals(roleService.getRoleByName("ROLE_ADMIN"))) {
-                model.addAttribute("roleAdmin", true);
-            }
-        }
-        model.addAttribute("editUser", user);
+    public String editUserForm(Model model, @PathVariable("id") Long id) {
+        model.addAttribute("listOfRoles", roleService.getAllRoles());
+        model.addAttribute("userForEdit", userService.getUserById(id));
         return "admin_editUser";
     }
 
     @PostMapping(value = "/admin/edit")
-    public String editUser(@ModelAttribute("editUser") User user,
-                           @RequestParam(required = false) String roleAdmin) {
-
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleService.getRoleByName("ROLE_USER"));
-        if (roleAdmin != null && roleAdmin.equals("ROLE_ADMIN")) {
-            roles.add(roleService.getRoleByName("ROLE_ADMIN"));
-        }
-        user.setRoles(roles);
-        userService.saveUser(user);
+    public String editUser(@ModelAttribute("editedUser") User editedUser,
+                           @RequestParam("authorities") List<String> listOfRoles) {
+        Set<Role> roleSet = userService.ListOfRolesToSet(listOfRoles);
+        editedUser.setRoles(roleSet);
+        userService.editUser(editedUser);
         return "redirect:/admin";
     }
 

@@ -147,13 +147,14 @@ public class User implements Serializable, UserDetails {
                 Objects.equals(password, user.password) &&
                 Objects.equals(firstname, user.firstname) &&
                 Objects.equals(lastname, user.lastname) &&
+                Objects.equals(age, user.age) &&
                 Objects.equals(email, user.email) &&
                 Objects.equals(roles, user.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(user_id, username, password, firstname, lastname, email, roles);
+        return Objects.hash(user_id, username, password, firstname, lastname, age,  email, roles);
     }
 
     @Override
@@ -164,6 +165,7 @@ public class User implements Serializable, UserDetails {
                 ", password='" + password + '\'' +
                 ", firstName='" + firstname + '\'' +
                 ", lastName='" + lastname + '\'' +
+                ", age='" + age + '\'' +
                 ", email='" + email + '\'' +
                 ", roles=" + roles +
                 '}';

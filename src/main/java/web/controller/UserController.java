@@ -14,12 +14,9 @@ import java.security.Principal;
 
 @Controller
 public class UserController {
-    private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    private UserService userService;
 
 /*    @GetMapping("/user")
     public ModelAndView showUser() {

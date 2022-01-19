@@ -34,12 +34,16 @@ CREATE TABLE `t_users`
   DEFAULT CHARSET = utf8;
 
 INSERT INTO `t_users` (`user_id`, `username`, `password`, `firstname`, `lastname`, `age`, `email`)
-VALUES (1, 'admin', 'admin', 'none', 'none', 0, 'none'),
-       (2, 'editUser', 'editUser', 'none', 'none', 0, 'none'),
-       (3, 'GoldenHairy', 'ThorOdinson954', 'Thor', 'Odinson', 2098, 'GodOfThunder@gmail.com'),
-       (4, 'LokiRuled', 'LokiLaufeyson965', 'Loki', 'Laufeyson', 2059, 'GodOfMischiefr@gmail.com'),
-       (5, 'AllFather', 'OdinBorson1', 'Odin', 'Borson', 6089, 'AllFather@gmail.com'),
-       (6, 'Hela666', 'HelaOdinson437', 'Hela', 'Odinson', 3574, 'GoddessOfDeath@gmail.com');
+VALUES (1, 'admin', '$2a$12$UmXTqpzuG.38VRVT9Vp2r.KWvY0XXftOEow/9P.xYtXtFCBJmczg6', 'none', 'none', 0, 'none'),
+       (2, 'user', '$2a$12$LhgKNh0ap2.SdftZAw4idus0o9DW13WbQyiO9SaBagVnrXF5QULOW', 'none', 'none', 0, 'none'),
+       (3, 'GoldenHairy', '$2a$12$3N8Lqz8aMKQbBpFFA6avouHVzvm2U5K3z.MGsj5XmWMIB0jqNowCa', 'Thor', 'Odinson', 2098,
+        'GodOfThunder@gmail.com'),
+       (4, 'LokiRuled', '$2a$12$WaZU5Q5kEekLAhYjWd/0d..zpmf7/RuhS33fiJaq/i.h1h.waarT2', 'Loki', 'Laufeyson', 2059,
+        'GodOfMischiefr@gmail.com'),
+       (5, 'AllFather', '$2a$12$MHxCgH6nQlSqUfZVH4wKcuWGgda0JODso/th/v7DpvNnqMh1CzWaq', 'Odin', 'Borson', 6089,
+        'AllFather@gmail.com'),
+       (6, 'Hela666', '$2a$12$aHCAgyCWfKYlYIyE2/u9POj1i/YjjqXKgG8N3h7AtHs5sixpCSHi6', 'Hela', 'Odinson', 3574,
+        'GoddessOfDeath@gmail.com');
 
 # Дамп таблицы t_users_roles
 # ------------------------------------------------------------
@@ -56,10 +60,11 @@ CREATE TABLE `t_users_roles`
   DEFAULT CHARSET = utf8;
 
 INSERT INTO `t_users_roles` (`user_id`, `role_id`)
-VALUES (1, 1), -- editUser admin has role ADMIN
-       (2, 2), -- editUser editUser has role USER
-       (3, 2), -- editUser Thor has role USER
-       (4, 2), -- editUser Loki has role USER
-       (5, 1), -- editUser Odin has role ADMIN
-       (5, 2), -- editUser Odin has role USER
-       (6, 2); -- editUser Hela has role USER
+VALUES (1, 1), -- User Admin has role ADMIN
+       (2, 2), -- User User has role USER
+       (3, 2), -- User Thor has role USER
+       (4, 2), -- User Loki has role USER
+       (5, 1), -- User Odin has role ADMIN
+       (5, 2), -- User Odin has role USER
+       (6, 2); -- User Hela has role USER
+

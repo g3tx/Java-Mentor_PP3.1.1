@@ -1,20 +1,19 @@
 package web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import web.model.Role;
 import web.model.User;
-import web.repository.RoleRepository;
 import web.repository.UserRepository;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -24,21 +23,59 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
+    private RoleService roleService;
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Override
-    public void saveUser(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles(new HashSet<>(roleRepository.findAll()));
-        userRepository.save(user);
+    public boolean saveUser(User newUser) {
+        User userFromDB = userRepository.getUserByUsername(newUser.getUsername());
+        if (userFromDB != null) {
+            return false;
+        }
+        User userForSave = new User();
+        userForSave.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        userForSave.setRoles(newUser.getRoles());
+        userRepository.save(newUser);
+        return true;
     }
 
     @Override
-    public void deleteUser(Long userId) {
-        userRepository.deleteById(userId);
+    public boolean editUser(User UserForEdit) {
+        User userFromDB = userRepository.getUserByUsername(UserForEdit.getUsername());
+        if (userFromDB == null) {
+            return false;
+        }
+        User editedUser = userRepository.getUserByUsername(UserForEdit.getUsername());
+        editedUser.setUserId(UserForEdit.getUserId());
+        editedUser.setUsername(UserForEdit.getUsername());
+        editedUser.setFirstname(UserForEdit.getFirstname());
+        editedUser.setLastname(UserForEdit.getLastname());
+        editedUser.setAge(UserForEdit.getAge());
+        editedUser.setEmail(UserForEdit.getEmail());
+        editedUser.setPassword(passwordEncoder.encode(UserForEdit.getPassword()));
+        editedUser.setRoles(UserForEdit.getRoles());
+        userRepository.saveAndFlush(editedUser);
+        return true;
+    }
+
+    @Override
+    public Set<Role> ListOfRolesToSet(List<String> rolesId) {
+        Set<Role> roleSet = new HashSet<>();
+        for (String id : rolesId) {
+            roleSet.add(roleService.getRoleById(Long.parseLong(id)));
+        }
+        return roleSet;
+    }
+
+    @Override
+    public boolean deleteUser(Long userId) {
+        if (userRepository.findById(userId).isPresent()) {
+            userRepository.deleteById(userId);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -52,17 +89,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         User user = userRepository.getUserByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for (Role role : user.getRoles()){
-            grantedAuthorities.add(new SimpleGrantedAuthority(role.getRolename()));
-        }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
+        if (user == null) throw new UsernameNotFoundException(username);
+        return user;
     }
 }
