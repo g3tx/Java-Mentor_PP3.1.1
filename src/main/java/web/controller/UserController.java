@@ -2,6 +2,7 @@ package web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,9 +35,9 @@ public class UserController {
     }*/
 
     @GetMapping(value = "/user")
-    public String getUserByName(Model model, Principal principal) {
-        //User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = (User)userService.loadUserByUsername(principal.getName());
+    public String getUserByName(Model model) {
+        UserDetails details = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = (User) userService.loadUserByUsername(details.getUsername());
         model.addAttribute("user", user);
         return "user";
     }
