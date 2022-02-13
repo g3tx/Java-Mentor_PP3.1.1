@@ -29,35 +29,22 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public boolean saveUser(User newUser) {
-        User userFromDB = userRepository.getUserByUsername(newUser.getUsername());
-        if (userFromDB != null) {
-            return false;
-        }
-        User userForSave = new User();
-        userForSave.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        userForSave.setRoles(newUser.getRoles());
-        userRepository.save(newUser);
-        return true;
+    public void saveUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
     }
 
     @Override
-    public boolean editUser(User UserForEdit) {
-        User userFromDB = userRepository.getUserByUsername(UserForEdit.getUsername());
-        if (userFromDB == null) {
-            return false;
-        }
-        User editedUser = userRepository.getUserByUsername(UserForEdit.getUsername());
-        editedUser.setUserId(UserForEdit.getUserId());
-        editedUser.setUsername(UserForEdit.getUsername());
-        editedUser.setFirstname(UserForEdit.getFirstname());
-        editedUser.setLastname(UserForEdit.getLastname());
-        editedUser.setAge(UserForEdit.getAge());
-        editedUser.setEmail(UserForEdit.getEmail());
-        editedUser.setPassword(passwordEncoder.encode(UserForEdit.getPassword()));
-        editedUser.setRoles(UserForEdit.getRoles());
-        userRepository.saveAndFlush(editedUser);
-        return true;
+    public void editUser(User user) {
+        User userForEdit = userRepository.getUserById(user.getUserId());
+        userForEdit.setUserId(user.getUserId());
+        userForEdit.setFirstname(user.getFirstname());
+        userForEdit.setLastname(user.getLastname());
+        userForEdit.setAge(user.getAge());
+        userForEdit.setEmail(user.getEmail());
+        userForEdit.setPassword(passwordEncoder.encode(user.getPassword()));
+        userForEdit.setRoles(user.getRoles());
+        userRepository.saveAndFlush(user);
     }
 
     @Override
@@ -80,8 +67,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Long userId) {
-        Optional<User> userFromDb = userRepository.findById(userId);
-        return userFromDb.orElse(new User());
+        return userRepository.getUserById(userId);
     }
 
     @Override

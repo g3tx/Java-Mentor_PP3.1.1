@@ -5,12 +5,13 @@ import web.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface UserService extends UserDetailsService {
-    boolean saveUser(User user);
+    void saveUser(User user);
 
-    boolean editUser(User user);
+    void editUser(User user);
 
     Set<Role> ListOfRolesToSet(List<String> rolesId);
 

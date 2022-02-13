@@ -18,13 +18,12 @@ public class User implements Serializable, UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long user_id;
 
-    @Column(unique = true)
-    private String username;
-
     private String password;
     private String firstname;
     private String lastname;
     private Integer age;
+
+    @Column(unique = true)
     private String email;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
@@ -36,8 +35,7 @@ public class User implements Serializable, UserDetails {
     public User() {
     }
 
-    public User(String username, String password, String firstname, String lastname, Integer age, String email, Set<Role> roles) {
-        this.username = username;
+    public User(String password, String firstname, String lastname, Integer age, String email, Set<Role> roles) {
         this.password = password;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -54,10 +52,6 @@ public class User implements Serializable, UserDetails {
         this.user_id = id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -69,7 +63,7 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     public String getFirstname() {
@@ -143,7 +137,6 @@ public class User implements Serializable, UserDetails {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return Objects.equals(user_id, user.user_id) &&
-                Objects.equals(username, user.username) &&
                 Objects.equals(password, user.password) &&
                 Objects.equals(firstname, user.firstname) &&
                 Objects.equals(lastname, user.lastname) &&
@@ -154,14 +147,13 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public int hashCode() {
-        return Objects.hash(user_id, username, password, firstname, lastname, age,  email, roles);
+        return Objects.hash(user_id, password, firstname, lastname, age, email, roles);
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + user_id +
-                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", firstName='" + firstname + '\'' +
                 ", lastName='" + lastname + '\'' +

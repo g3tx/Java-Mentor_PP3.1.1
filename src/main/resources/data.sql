@@ -21,7 +21,6 @@ DROP TABLE IF EXISTS `t_users`;
 CREATE TABLE `t_users`
 (
     `user_id`   bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-    `username`  varchar(250) DEFAULT NULL,
     `password`  varchar(250) DEFAULT NULL,
     `firstname` varchar(250) DEFAULT NULL,
     `lastname`  varchar(250) DEFAULT NULL,
@@ -29,20 +28,19 @@ CREATE TABLE `t_users`
     `email`     varchar(250) DEFAULT NULL,
     PRIMARY KEY (`user_id`),
     UNIQUE KEY `user_id` (`user_id`),
-    UNIQUE KEY `username` (`username`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-INSERT INTO `t_users` (`user_id`, `username`, `password`, `firstname`, `lastname`, `age`, `email`)
-VALUES (1, 'admin', '$2a$12$UmXTqpzuG.38VRVT9Vp2r.KWvY0XXftOEow/9P.xYtXtFCBJmczg6', 'none', 'none', 0, 'none'),
-       (2, 'user', '$2a$12$LhgKNh0ap2.SdftZAw4idus0o9DW13WbQyiO9SaBagVnrXF5QULOW', 'none', 'none', 0, 'none'),
-       (3, 'GoldenHairy', '$2a$12$3N8Lqz8aMKQbBpFFA6avouHVzvm2U5K3z.MGsj5XmWMIB0jqNowCa', 'Thor', 'Odinson', 2098,
+INSERT INTO `t_users` (`user_id`, `password`, `firstname`, `lastname`, `age`, `email`)
+VALUES (1, '$2a$12$UmXTqpzuG.38VRVT9Vp2r.KWvY0XXftOEow/9P.xYtXtFCBJmczg6', 'none', 'none', 0, 'none'),
+       (2, '$2a$12$LhgKNh0ap2.SdftZAw4idus0o9DW13WbQyiO9SaBagVnrXF5QULOW', 'none', 'none', 0, 'none'),
+       (3, '$2a$12$3N8Lqz8aMKQbBpFFA6avouHVzvm2U5K3z.MGsj5XmWMIB0jqNowCa', 'Thor', 'Odinson', 2098,
         'GodOfThunder@gmail.com'),
        (4, 'LokiRuled', '$2a$12$WaZU5Q5kEekLAhYjWd/0d..zpmf7/RuhS33fiJaq/i.h1h.waarT2', 'Loki', 'Laufeyson', 2059,
         'GodOfMischiefr@gmail.com'),
-       (5, 'AllFather', '$2a$12$MHxCgH6nQlSqUfZVH4wKcuWGgda0JODso/th/v7DpvNnqMh1CzWaq', 'Odin', 'Borson', 6089,
+       (5, '$2a$12$MHxCgH6nQlSqUfZVH4wKcuWGgda0JODso/th/v7DpvNnqMh1CzWaq', 'Odin', 'Borson', 6089,
         'AllFather@gmail.com'),
-       (6, 'Hela666', '$2a$12$aHCAgyCWfKYlYIyE2/u9POj1i/YjjqXKgG8N3h7AtHs5sixpCSHi6', 'Hela', 'Odinson', 3574,
+       (6, '$2a$12$aHCAgyCWfKYlYIyE2/u9POj1i/YjjqXKgG8N3h7AtHs5sixpCSHi6', 'Hela', 'Odinson', 3574,
         'GoddessOfDeath@gmail.com');
 
 # Дамп таблицы t_users_roles
