@@ -36,15 +36,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void editUser(User user) {
-        User userForEdit = userRepository.getUserById(user.getUserId());
-        userForEdit.setUserId(user.getUserId());
-        userForEdit.setFirstname(user.getFirstname());
-        userForEdit.setLastname(user.getLastname());
-        userForEdit.setAge(user.getAge());
-        userForEdit.setEmail(user.getEmail());
-        userForEdit.setPassword(passwordEncoder.encode(user.getPassword()));
-        userForEdit.setRoles(user.getRoles());
-        userRepository.saveAndFlush(user);
+        User userFromDb = userRepository.getUserByUsername(user.getUsername());
+        userFromDb.setUserId(user.getUserId());
+        userFromDb.setFirstname(user.getFirstname());
+        userFromDb.setLastname(user.getLastname());
+        userFromDb.setAge(user.getAge());
+        userFromDb.setEmail(user.getEmail());
+        userFromDb.setPassword(passwordEncoder.encode(user.getPassword()));
+        userFromDb.setRoles(user.getRoles());
+        userRepository.saveAndFlush(userFromDb);
     }
 
     @Override
@@ -67,7 +67,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Long userId) {
-        return userRepository.getUserById(userId);
+        Optional<User> userFromDb = userRepository.findById(userId);
+        return userFromDb.orElse(new User());
     }
 
     @Override
